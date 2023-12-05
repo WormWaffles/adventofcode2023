@@ -49,24 +49,29 @@ for i in range(len(cards)):
     formated_cards[i] = [front, back]
 
 def count(card, idx):
+    buffer = 0
+    total = 0
     for num in card[0]:
-        valid = True
-        if num not in card[1]:
-            valid = False
+        valid = False
+        if num in card[1]:
+            valid = True
     if not valid:
         return 0
     for num in card[1]:
         if num in card[0]:
-            idx += 1
-            print(idx)
-            return 1 + count(formated_cards[idx], idx)
+            buffer += 1
+    for i in range(buffer):
+        idx += 1
+        total += 1 + count(formated_cards[idx], idx)
+    return total
 
 for card in formated_cards:
     idx = 0
     total_cards += count(formated_cards[card], idx)
-    # print(total_cards)
-    exit()
+    # print("\nTotal cards: " + str(total_cards))
+    # exit()
 
 # print(sum)
-print(total_cards)
+print("\nTotal cards: " + str(total_cards))
 # 595 too low
+# 16358 too low
