@@ -1,8 +1,9 @@
+import sys
+
 # Card = winning nums | my nums
 cards = open('Day_4/cards.txt', 'r').read().split('\n')
 
 sum = 0
-# total_cards = len(cards)
 total_cards = 0
 
 for card in cards:
@@ -48,30 +49,44 @@ for i in range(len(cards)):
 
     formated_cards[i] = [front, back]
 
+print("Sum of points: " + str(sum))
+print("\ncalculating # of cards...")
+
+def progress(count, total, status=''):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+    sys.stdout.write('[{0}] {1}%  {2}\r'.format(bar, percents, status))
+    sys.stdout.flush()
+
+progress(0, 190, status='')
+
 def count(card, idx):
     buffer = 0
-    total = 0
-    for num in card[0]:
+    for num in card[1]:
         valid = False
-        if num in card[1]:
+        if num in card[0]:
             valid = True
+            break
     if not valid:
         return 0
     for num in card[1]:
         if num in card[0]:
             buffer += 1
+    total = 0
     for i in range(buffer):
         idx += 1
         total += 1 + count(formated_cards[idx], idx)
     return total
 
+idx = 0
 for card in formated_cards:
-    idx = 0
-    total_cards += count(formated_cards[card], idx)
-    # print("\nTotal cards: " + str(total_cards))
-    # exit()
+    total_cards += 1 + count(formated_cards[card], idx)
+    progress(idx, 190, status='')
+    idx += 1
 
-# print(sum)
-print("\nTotal cards: " + str(total_cards))
-# 595 too low
-# 16358 too low
+progress(190, 190, status='')
+print("\n\nTotal cards: " + str(total_cards))
